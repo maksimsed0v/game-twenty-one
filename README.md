@@ -1,7 +1,7 @@
-#Game 21 (Twenty-One)
+# Game 21 (Twenty-One)
 
 ---
-##Rules:
+## Rules:
 There are 52 cards in the deck:
 * 2-10 - nominal value
 * jack - 2
@@ -16,7 +16,7 @@ The cards are taken from the top of the deck.
 After each round, the players continue to draw cards from the remaining deck. 
 If all the cards in the deck run out, the points are counted, and the game ends
 
-##Game progress:
+## Game progress:
 At the beginning of each round, the computer collects cards for itself until 
 the sum of its points becomes greater than or equal to 17. 
 Then the user is given one card and is offered a choice: 
