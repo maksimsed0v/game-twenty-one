@@ -1,6 +1,5 @@
 # Game 21 (Twenty-One)
 
----
 ## Rules:
 There are 52 cards in the deck:
 * 2-10 - nominal value
