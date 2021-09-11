@@ -10,11 +10,13 @@ type cardSuit string
 type cardValue 	string
 
 const (
+	// cardSuit - constants for card suits
 	spades 			cardSuit 	= 	"spade"
 	hearts 			cardSuit 	= 	"heart"
 	clubs 			cardSuit 	= 	"club"
 	diamonds 		cardSuit 	= 	"diamond"
 
+	// cardValue - constants for card values
 	two 			cardValue 	=	"2"
 	three			cardValue 	= 	"3"
 	four 			cardValue 	= 	"4"
@@ -29,22 +31,28 @@ const (
 	king			cardValue	=	"K"
 	ace				cardValue	=	"A"
 
+	// constants for the length of arrays
 	numberOfCards	int			=	52
 	numberOfSuits	int			=	4
 	numberOfValues	int			=	13
 )
 
+// the card struct describes the card.
+// the struct contains the values, suits and costs of the card
 type card struct {
 	value 	cardValue
 	suit 	cardSuit
 	cost 	int
 }
 
+// the player struct describes the player
+// the struct contains the player's cards and his name
 type player struct {
 	cards []card
 	name string
 }
 
+// the score method returns the sum of the player's points
 func (p *player) score() int {
 	var score = 0
 	for _, card := range p.cards {
@@ -53,6 +61,7 @@ func (p *player) score() int {
 	return score
 }
 
+// the showCards method returns the values and suits of all the player's cards as a string
 func (p *player) showCards() string {
 	var allCards string
 	for _, card := range p.cards {
@@ -66,18 +75,27 @@ func (p *player) showCards() string {
 	return allCards[:len(allCards) - 2] + "."
 }
 
+// the info method outputs information about the player's cards and score to the console
 func (p *player) info() {
 	fmt.Println(p.name + " cards:\n" +p.showCards())
 	fmt.Println(p.name + " score:")
 	fmt.Println(p.score())
 }
 
-func (p *player) takeCard(deck *[]card){
+// the takeCard method adds one card to the player from the top of the deck
+// input parameter: deck of cards
+func (p *player) takeCard(deck *[]card) {
 	p.cards = append(p.cards, (*deck)[len(*deck)-1])
 	*deck = (*deck)[:len(*deck)-1]
 }
 
+// func createDeck generates a deck of cards and returns it as a slice
 func createDeck() []card {
+	// suits - an array of all suits of cards
+	// values - an array of all values of cards
+	// costs - an array of all costs of cards
+	// deck - a slice of a deck of cards
+	// current - a variable for the current card in the deck
 	suits := [numberOfSuits]cardSuit{spades, hearts, clubs, diamonds}
 	values := [numberOfValues]cardValue{two, three, four, five, six, seven, eight, nine, ten, jack, queen, king, ace}
 	costs := [numberOfValues]int{2, 3, 4, 5, 6, 7, 8, 9, 10, 2, 3, 4, 11}
@@ -94,6 +112,8 @@ func createDeck() []card {
 	return deck
 }
 
+// func randomDeck shuffles the deck of cards
+// input parameter: deck of cards
 func randomDeck(deck []card) {
 	rand.Seed(time.Now().UnixNano())
 	for key := range deck {
@@ -102,7 +122,11 @@ func randomDeck(deck []card) {
 	}
 }
 
+// func computerGame creates a computer player and gives him cards
+// input parameter: deck of cards
+// output parameter: computer player
 func computerGame(deck *[]card) player{
+	// playerAI - the object of the player structure
 	var playerAI player
 	playerAI.name = "computer"
 	for range *deck {
@@ -115,7 +139,11 @@ func computerGame(deck *[]card) player{
 	return playerAI
 }
 
+// func playerGame creates a user player and gives him cards
+// input parameters: deck of cards, name of user
+// output parameter: user player
 func playerGame(deck *[]card, name string) player{
+	// playerUser - the object of the player structure
 	var playerUser player
 	playerUser.name = name
 
@@ -128,6 +156,7 @@ func playerGame(deck *[]card, name string) player{
 
 stop:
 	for range *deck {
+		// answer - a variable for the player's response
 		var answer string
 		fmt.Println("more? (Y/N)")
 		fmt.Scanln(&answer)
@@ -145,7 +174,9 @@ stop:
 	return playerUser
 }
 
-func result(playerAI player, playerUser player, deck []card) {
+// func result outputs the result of the round to the console
+// input parameters: computer player, user player
+func result(playerAI player, playerUser player) {
 	fmt.Println("------------------------------------")
 	fmt.Println("---------------RESULT---------------")
 	fmt.Println("------------------------------------")
@@ -164,7 +195,11 @@ func result(playerAI player, playerUser player, deck []card) {
 	}
 }
 
+// func game performs the main function of the game
+// input parameter: deck of cards
 func game(deck []card) {
+	// playerAI, playerUser - the object of the player structure
+	// name - name of user
 	var playerAI, playerUser player
 	var name string
 	fmt.Println("enter your name:")
@@ -175,7 +210,7 @@ restart:
 		playerAI = computerGame(&deck)
 		playerUser = playerGame(&deck, name)
 
-		result(playerAI, playerUser, deck)
+		result(playerAI, playerUser)
 
 		if len(deck) == 0 {
 			fmt.Println("the deck is over!")
@@ -183,6 +218,7 @@ restart:
 		}
 
 		for {
+			// answer - a variable for the player's response
 			var answer string
 			fmt.Println("start the game again? (Y/N)")
 			fmt.Scanln(&answer)
