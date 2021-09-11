@@ -106,7 +106,7 @@ func computerGame(deck *[]card) player{
 	var playerAI player
 	playerAI.name = "computer"
 	for range *deck {
-		if playerAI.score() < 16 {
+		if playerAI.score() < 17 {
 			playerAI.takeCard(deck)
 		} else {
 			break
@@ -116,14 +116,14 @@ func computerGame(deck *[]card) player{
 }
 
 func playerGame(deck *[]card, name string) player{
-	var playerHost player
-	playerHost.name = name
+	var playerUser player
+	playerUser.name = name
 
 	if len(*deck) != 0 {
-		playerHost.takeCard(deck)
-		playerHost.info()
+		playerUser.takeCard(deck)
+		playerUser.info()
 	} else {
-		return playerHost
+		return playerUser
 	}
 
 stop:
@@ -133,8 +133,8 @@ stop:
 		fmt.Scanln(&answer)
 		switch answer{
 		case "Y", "y":
-			playerHost.takeCard(deck)
-			playerHost.info()
+			playerUser.takeCard(deck)
+			playerUser.info()
 		case "N", "n":
 			break stop
 		default:
@@ -142,34 +142,30 @@ stop:
 			continue stop
 		}
 	}
-	return playerHost
+	return playerUser
 }
 
-func result(playerAI player, playerHost player, deck []card) {
+func result(playerAI player, playerUser player, deck []card) {
 	fmt.Println("------------------------------------")
 	fmt.Println("---------------RESULT---------------")
 	fmt.Println("------------------------------------")
 
 	playerAI.info()
-	playerHost.info()
+	playerUser.info()
 
-	if len(deck) == 0 {
-		fmt.Println("the deck is over!")
-	}
-
-	if playerAI.score() > 21 && playerHost.score() > 21 {
+	if playerAI.score() > 21 && playerUser.score() > 21 {
 		fmt.Println("everyone lost!")
-	} else if (playerAI.score() > playerHost.score() && playerAI.score() <= 21) || (playerHost.score() > 21) {
+	} else if (playerAI.score() > playerUser.score() && playerAI.score() <= 21) || (playerUser.score() > 21) {
 		fmt.Println(playerAI.name + " won!")
-	} else if (playerAI.score() < playerHost.score() && playerHost.score() <= 21) || (playerAI.score() > 21) {
-		fmt.Println(playerHost.name + " won!")
-	} else if playerAI.score() == playerHost.score() {
+	} else if (playerAI.score() < playerUser.score() && playerUser.score() <= 21) || (playerAI.score() > 21) {
+		fmt.Println(playerUser.name + " won!")
+	} else if playerAI.score() == playerUser.score() {
 		fmt.Println("draw!")
 	}
 }
 
 func game(deck []card) {
-	var playerAI, playerHost player
+	var playerAI, playerUser player
 	var name string
 	fmt.Println("enter your name:")
 	fmt.Scanln(&name)
@@ -177,9 +173,14 @@ func game(deck []card) {
 restart:
 	for range deck {
 		playerAI = computerGame(&deck)
-		playerHost = playerGame(&deck, name)
+		playerUser = playerGame(&deck, name)
 
-		result(playerAI, playerHost, deck)
+		result(playerAI, playerUser, deck)
+
+		if len(deck) == 0 {
+			fmt.Println("the deck is over!")
+			break
+		}
 
 		for {
 			var answer string
