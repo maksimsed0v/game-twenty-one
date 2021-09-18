@@ -8,11 +8,7 @@ import (
 
 func main() {
 	fmt.Println("The game has started!")
-
-	deck := game.CreateDeck()
-	game.RandomDeck(deck)
-	game.Game(deck)
-
+	game.Game()
 	fmt.Println("The game is over!")
 }
 

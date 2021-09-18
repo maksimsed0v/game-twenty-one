@@ -19,8 +19,8 @@ const (
 	maxScore		int	= 21
 )
 
-// CreateDeck generates a deck of cards and returns it as a slice
-func CreateDeck() []card.Card {
+// createDeck generates a deck of cards and returns it as a slice
+func createDeck() []card.Card {
 	// suits - an array of all suits of cards
 	suits := [numberOfSuits]card.Suit{card.Spades, card.Hearts, card.Clubs, card.Diamonds}
 
@@ -44,8 +44,8 @@ func CreateDeck() []card.Card {
 	return deck
 }
 
-// RandomDeck shuffles the deck of cards
-func RandomDeck(deck []card.Card) {
+// randomDeck shuffles the deck of cards
+func randomDeck(deck []card.Card) {
 	// function for randomness
 	rand.Seed(time.Now().UnixNano())
 
@@ -150,7 +150,10 @@ func result(playerAI player, playerUser player) {
 }
 
 // Game performs the main function of the game
-func Game(deck []card.Card) {
+func Game() {
+	deck := createDeck()
+	randomDeck(deck)
+
 	// playerAI, playerUser - the object of the player structure
 	var playerAI, playerUser player
 
