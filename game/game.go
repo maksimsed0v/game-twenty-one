@@ -1,39 +1,13 @@
-package main
+package game
 
 import (
 	"fmt"
 	"math/rand"
 	"time"
+
+	"../card"
 )
 
-// cardSuit - constants for card suits
-type cardSuit string
-const (
-	spades 			cardSuit 	= 	"spade"
-	hearts 			cardSuit 	= 	"heart"
-	clubs 			cardSuit 	= 	"club"
-	diamonds 		cardSuit 	= 	"diamond"
-)
-
-// cardValue - constants for card values
-type cardValue 	string
-const (
-	two 			cardValue 	=	"2"
-	three			cardValue 	= 	"3"
-	four 			cardValue 	= 	"4"
-	five 			cardValue 	= 	"5"
-	six				cardValue	=	"6"
-	seven			cardValue	=	"7"
-	eight			cardValue	=	"8"
-	nine			cardValue	=	"9"
-	ten				cardValue	=	"10"
-	jack			cardValue	=	"J"
-	queen			cardValue	=	"Q"
-	king			cardValue	=	"K"
-	ace				cardValue	=	"A"
-)
-
-// constants for the length of arrays
 const (
 	// numberOfSuits - length of the suits array
 	numberOfSuits	int	= 4
@@ -45,87 +19,33 @@ const (
 	maxScore		int	= 21
 )
 
-// the card struct describes the card.
-// the struct contains the values, suits and costs of the card
-type card struct {
-	value 	cardValue
-	suit 	cardSuit
-	cost 	int //TODO разделить механики
-}
-
-// the player struct describes the player
-// the struct contains the player's cards and his name
-type player struct {
-	cards []card
-	name string
-}
-
-// the score method returns the sum of the player's points
-func (p *player) score() (result int) {
-	for _, card := range p.cards {
-		result += card.cost
-	}
-	return
-}
-
-// the showCards method returns the values and suits of all the player's cards as a string
-func (p *player) showCards() (allCards string) {
-	for _, card := range p.cards {
-		if card.value != ""{
-			allCards += fmt.Sprintf("%s %s, ", card.value, card.suit)
-		}
-	}
-	if allCards == "" {
-		return "no cards"
-	}
-	return allCards[:len(allCards) - 2] + "."
-}
-
-// the info method outputs information about the player's cards and score to the console
-func (p *player) info() {
-	fmt.Println(p.name + " cards:\n" +p.showCards())
-	fmt.Println(p.name + " score:")
-	fmt.Println(p.score())
-}
-
-// the takeCard method adds one card to the player from the top of the deck
-// input parameter: deck of cards
-func (p *player) takeCard(deck *[]card) {
-	p.cards = append(p.cards, (*deck)[len(*deck)-1])
-	*deck = (*deck)[:len(*deck)-1]
-}
-
-// func createDeck generates a deck of cards and returns it as a slice
-func createDeck() []card {
+// CreateDeck generates a deck of cards and returns it as a slice
+func CreateDeck() []card.Card {
 	// suits - an array of all suits of cards
-	suits := [numberOfSuits]cardSuit{spades, hearts, clubs, diamonds}
+	suits := [numberOfSuits]card.Suit{card.Spades, card.Hearts, card.Clubs, card.Diamonds}
 
 	// values - an array of all values of cards
-	values := [numberOfValues]cardValue{two, three, four, five, six, seven, eight, nine, ten, jack, queen, king, ace}
-
-	// costs - an array of all costs of cards
-	costs := [numberOfValues]int{2, 3, 4, 5, 6, 7, 8, 9, 10, 2, 3, 4, 11}
+	values := [numberOfValues]card.Value{card.Two, card.Three, card.Four, card.Five, card.Six,
+		card.Seven, card.Eight, card.Nine, card.Ten, card.Jack, card.Queen, card.King, card.Ace}
 
 	// deck - a slice of a deck of cards
-	deck := make([]card, numberOfValues*numberOfSuits)
+	deck := make([]card.Card, numberOfValues*numberOfSuits)
 
 	// current - a variable for the current card in the deck
 	current := 0
 
 	for v := 0; v < numberOfValues ; v++ {
 		for s := 0; s < numberOfSuits ; s++ {
-			deck[current].value = values[v]
-			deck[current].suit = suits[s]
-			deck[current].cost = costs[v]
+			deck[current].Value = values[v]
+			deck[current].Suit = suits[s]
 			current += 1
 		}
 	}
 	return deck
 }
 
-// func randomDeck shuffles the deck of cards
-// input parameter: deck of cards
-func randomDeck(deck []card) {
+// RandomDeck shuffles the deck of cards
+func RandomDeck(deck []card.Card) {
 	// function for randomness
 	rand.Seed(time.Now().UnixNano())
 
@@ -135,10 +55,8 @@ func randomDeck(deck []card) {
 	}
 }
 
-// func computerGame creates a computer player and gives him cards
-// input parameter: deck of cards
-// output parameter: computer player, playerAI - the object of the player structure TODO исправить коммент
-func computerGame(deck *[]card) (playerAI player) {
+// computerGame creates a computer player and gives him cards
+func computerGame(deck *[]card.Card) (playerAI player) {
 	playerAI.name = "computer"
 
 	// costs - an array of all costs of cards
@@ -158,7 +76,7 @@ func computerGame(deck *[]card) (playerAI player) {
 			playerAI.takeCard(deck)
 		} else if playerAI.score() < 20 {
 			for _, value := range costs {
-				if value <= maxScore - playerAI.score() {
+				if value <= (maxScore - playerAI.score()) {
 					matchCards += 1
 				}
 			}
@@ -176,11 +94,9 @@ func computerGame(deck *[]card) (playerAI player) {
 	return
 }
 
-// func playerGame creates a user player and gives him cards
-// input parameters: deck of cards, name of user
-// output parameter: user player, playerUser - the object of the player structure TODO комментарий
-func playerGame(deck *[]card, name string) (playerUser player, err error){
-	playerUser.name = name
+// playerGame creates a user player and gives him cards
+func playerGame(deck *[]card.Card, userName string) (playerUser player, err error){
+	playerUser.name = userName
 
 	if len(*deck) != 0 {
 		playerUser.takeCard(deck)
@@ -213,8 +129,7 @@ stop:
 	return playerUser, nil
 }
 
-// func result outputs the result of the round to the console
-// input parameters: computer player, user player
+// result outputs the result of the round to the console
 func result(playerAI player, playerUser player) {
 	fmt.Println("------------------------------------")
 	fmt.Println("---------------RESULT---------------")
@@ -234,13 +149,14 @@ func result(playerAI player, playerUser player) {
 	}
 }
 
-// func game performs the main function of the game
-// input parameter: deck of cards
-func game(deck []card) {
+// Game performs the main function of the game
+func Game(deck []card.Card) {
 	// playerAI, playerUser - the object of the player structure
-	// name - name of user
 	var playerAI, playerUser player
+
+	// name - name of user
 	var name string
+
 	fmt.Println("enter your name:")
 	_, err := fmt.Scanln(&name)
 	if err != nil {
@@ -284,13 +200,3 @@ restart:
 		}
 	}
 }
-
-func main() {
-
-	deck := createDeck()
-	randomDeck(deck)
-
-	game(deck)
-}
-
-
