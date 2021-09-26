@@ -11,5 +11,3 @@ func main() {
 	game.Game()
 	fmt.Println("The game is over!")
 }
-
-

@@ -10,13 +10,13 @@ import (
 
 const (
 	// numberOfSuits - length of the suits array
-	numberOfSuits	int	= 4
+	numberOfSuits int = 4
 
 	// numberOfValues - length of the values array
-	numberOfValues	int	= 13
+	numberOfValues int = 13
 
 	// maxScore - maximum number of points in the game
-	maxScore		int	= 21
+	maxScore int = 21
 )
 
 // createDeck generates a deck of cards and returns it as a slice
@@ -34,8 +34,8 @@ func createDeck() []card.Card {
 	// current - a variable for the current card in the deck
 	current := 0
 
-	for v := 0; v < numberOfValues ; v++ {
-		for s := 0; s < numberOfSuits ; s++ {
+	for v := 0; v < numberOfValues; v++ {
+		for s := 0; s < numberOfSuits; s++ {
 			deck[current].Value = values[v]
 			deck[current].Suit = suits[s]
 			current += 1
@@ -95,7 +95,7 @@ func computerGame(deck *[]card.Card) (playerAI player) {
 }
 
 // playerGame creates a user player and gives him cards
-func playerGame(deck *[]card.Card, userName string) (playerUser player, err error){
+func playerGame(deck *[]card.Card, userName string) (playerUser player, err error) {
 	playerUser.name = userName
 
 	if len(*deck) != 0 {
@@ -115,7 +115,7 @@ stop:
 			fmt.Println(err)
 			return player{}, err
 		}
-		switch answer{
+		switch answer {
 		case "Y", "y":
 			playerUser.takeCard(deck)
 			playerUser.info()
