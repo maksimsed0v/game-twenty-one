@@ -1,4 +1,4 @@
-module github.com/maksimsed0v/game21-Twenty-One-
+module github.com/maksimsed0v/game-twenty-one
 
 go 1.17
 

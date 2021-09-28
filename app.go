@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/maksimsed0v/game21-Twenty-One-/game"
+	"github.com/maksimsed0v/game-twenty-one/game"
 )
 
 func main() {
