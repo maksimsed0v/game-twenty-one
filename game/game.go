@@ -5,7 +5,7 @@ import (
 	"math/rand"
 	"time"
 
-	"../card"
+	"github.com/maksimsed0v/card"
 )
 
 // maxScore - maximum number of points in the game

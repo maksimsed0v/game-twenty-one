@@ -3,7 +3,7 @@ package game
 import (
 	"fmt"
 
-	"../card"
+	"github.com/maksimsed0v/card"
 )
 
 // player describes the player
