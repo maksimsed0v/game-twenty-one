@@ -131,9 +131,7 @@ stop:
 
 // result outputs the result of the round to the console
 func result(playerAI player, playerUser player) {
-	fmt.Println("------------------------------------")
 	fmt.Println("---------------RESULT---------------")
-	fmt.Println("------------------------------------")
 
 	playerAI.info()
 	playerUser.info()
@@ -141,9 +139,9 @@ func result(playerAI player, playerUser player) {
 	if playerAI.score() > maxScore && playerUser.score() > maxScore {
 		fmt.Println("everyone lost!")
 	} else if (playerAI.score() > playerUser.score() && playerAI.score() <= maxScore) || (playerUser.score() > maxScore) {
-		fmt.Println(playerAI.name + " won!")
+		fmt.Printf("%s won!\n", playerAI.name)
 	} else if (playerAI.score() < playerUser.score() && playerUser.score() <= maxScore) || (playerAI.score() > maxScore) {
-		fmt.Println(playerUser.name + " won!")
+		fmt.Printf("%s won!\n", playerUser.name)
 	} else if playerAI.score() == playerUser.score() {
 		fmt.Println("draw!")
 	}

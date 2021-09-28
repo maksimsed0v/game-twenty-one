@@ -9,8 +9,8 @@ import (
 // player describes the player
 // the struct contains the player's cards and his name
 type player struct {
-	cards []card.Card
 	name  string
+	cards []card.Card
 }
 
 // score returns the sum of the player's points
@@ -51,9 +51,8 @@ func (p *player) showCards() (allCards string) {
 
 // info outputs information about the player's cards and score to the console
 func (p *player) info() {
-	fmt.Println(p.name + " cards:\n" + p.showCards())
-	fmt.Println(p.name + " score:")
-	fmt.Println(p.score())
+	fmt.Printf("%s cards:\n%s\n", p.name, p.showCards())
+	fmt.Printf("%s score:\n%d\n", p.name, p.score())
 }
 
 // takeCard adds one card to the player from the top of the deck
