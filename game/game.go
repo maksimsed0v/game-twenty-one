@@ -8,59 +8,15 @@ import (
 	"../card"
 )
 
-const (
-	// numberOfSuits - length of the suits array
-	numberOfSuits int = 4
-
-	// numberOfValues - length of the values array
-	numberOfValues int = 13
-
-	// maxScore - maximum number of points in the game
-	maxScore int = 21
-)
-
-// createDeck generates a deck of cards and returns it as a slice
-func createDeck() []card.Card {
-	// suits - an array of all suits of cards
-	suits := [numberOfSuits]card.Suit{card.Spades, card.Hearts, card.Clubs, card.Diamonds}
-
-	// values - an array of all values of cards
-	values := [numberOfValues]card.Value{card.Two, card.Three, card.Four, card.Five, card.Six,
-		card.Seven, card.Eight, card.Nine, card.Ten, card.Jack, card.Queen, card.King, card.Ace}
-
-	// deck - a slice of a deck of cards
-	deck := make([]card.Card, numberOfValues*numberOfSuits)
-
-	// current - a variable for the current card in the deck
-	current := 0
-
-	for v := 0; v < numberOfValues; v++ {
-		for s := 0; s < numberOfSuits; s++ {
-			deck[current].Value = values[v]
-			deck[current].Suit = suits[s]
-			current += 1
-		}
-	}
-	return deck
-}
-
-// randomDeck shuffles the deck of cards
-func randomDeck(deck []card.Card) {
-	// function for randomness
-	rand.Seed(time.Now().UnixNano())
-
-	for key := range deck {
-		randInt := rand.Intn(len(deck))
-		deck[key], deck[randInt] = deck[randInt], deck[key]
-	}
-}
+// maxScore - maximum number of points in the game
+const maxScore int = 21
 
 // computerGame creates a computer player and gives him cards
 func computerGame(deck *[]card.Card) (playerAI player) {
 	playerAI.name = "computer"
 
 	// costs - an array of all costs of cards
-	costs := [numberOfValues]int{2, 3, 4, 5, 6, 7, 8, 9, 10, 2, 3, 4, 11}
+	costs := [card.NumberOfValues]int{2, 3, 4, 5, 6, 7, 8, 9, 10, 2, 3, 4, 11}
 
 	// matchCards - number of matching cards
 	matchCards := 0
@@ -80,7 +36,7 @@ func computerGame(deck *[]card.Card) (playerAI player) {
 					matchCards += 1
 				}
 			}
-			chance = int(float64(matchCards) / float64(numberOfValues) * 100)
+			chance = int(float64(matchCards) / float64(card.NumberOfValues) * 100)
 			randInt := 1 + rand.Intn(100)
 			if randInt <= chance {
 				playerAI.takeCard(deck)
@@ -149,8 +105,8 @@ func result(playerAI player, playerUser player) {
 
 // Game performs the main function of the game
 func Game() {
-	deck := createDeck()
-	randomDeck(deck)
+	deck := card.CreateDeck()
+	card.RandomDeck(deck)
 
 	// playerAI, playerUser - the object of the player structure
 	var playerAI, playerUser player
