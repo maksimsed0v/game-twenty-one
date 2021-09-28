@@ -15,21 +15,6 @@ type player struct {
 
 // score returns the sum of the player's points
 func (p *player) score() (result int) {
-	costs := map[card.Value]int{
-		card.Two:   2,
-		card.Three: 3,
-		card.Four:  4,
-		card.Five:  5,
-		card.Six:   6,
-		card.Seven: 7,
-		card.Eight: 8,
-		card.Nine:  9,
-		card.Ten:   10,
-		card.Jack:  2,
-		card.Queen: 3,
-		card.King:  4,
-		card.Ace:   11,
-	}
 	for _, c := range p.cards {
 		result += costs[c.Value]
 	}
@@ -49,14 +34,14 @@ func (p *player) showCards() (allCards string) {
 	return allCards[:len(allCards)-2] + "."
 }
 
-// info outputs information about the player's cards and score to the console
-func (p *player) info() {
-	fmt.Printf("%s cards:\n%s\n", p.name, p.showCards())
-	fmt.Printf("%s score:\n%d\n", p.name, p.score())
-}
-
 // takeCard adds one card to the player from the top of the deck
 func (p *player) takeCard(deck *[]card.Card) {
 	p.cards = append(p.cards, (*deck)[len(*deck)-1])
 	*deck = (*deck)[:len(*deck)-1]
+}
+
+// info outputs information about the player's cards and score to the console
+func (p *player) info() {
+	fmt.Printf("%s cards:\n%s\n", p.name, p.showCards())
+	fmt.Printf("%s score:\n%d\n", p.name, p.score())
 }

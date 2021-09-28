@@ -11,12 +11,26 @@ import (
 // maxScore - maximum number of points in the game
 const maxScore int = 21
 
+// costs - a map of card values and their cost
+var costs = map[card.Value]int{
+	card.Two:   2,
+	card.Three: 3,
+	card.Four:  4,
+	card.Five:  5,
+	card.Six:   6,
+	card.Seven: 7,
+	card.Eight: 8,
+	card.Nine:  9,
+	card.Ten:   10,
+	card.Jack:  2,
+	card.Queen: 3,
+	card.King:  4,
+	card.Ace:   11,
+}
+
 // computerGame creates a computer player and gives him cards
 func computerGame(deck *[]card.Card) (playerAI player) {
 	playerAI.name = "computer"
-
-	// costs - an array of all costs of cards
-	costs := [card.NumberOfValues]int{2, 3, 4, 5, 6, 7, 8, 9, 10, 2, 3, 4, 11}
 
 	// matchCards - number of matching cards
 	matchCards := 0
@@ -28,9 +42,9 @@ func computerGame(deck *[]card.Card) (playerAI player) {
 	rand.Seed(time.Now().UnixNano())
 
 	for range *deck {
-		if playerAI.score() < 17 {
+		if playerAI.score() < 17 { // the probability is more than 50%
 			playerAI.takeCard(deck)
-		} else if playerAI.score() < 20 {
+		} else if playerAI.score() < 20 { // the probability is less than 50%, the computer is taking a risk.
 			for _, value := range costs {
 				if value <= (maxScore - playerAI.score()) {
 					matchCards += 1
@@ -71,6 +85,7 @@ stop:
 			fmt.Println(err)
 			return player{}, err
 		}
+
 		switch answer {
 		case "Y", "y":
 			playerUser.takeCard(deck)
