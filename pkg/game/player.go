@@ -3,7 +3,7 @@ package game
 import (
 	"fmt"
 
-	"github.com/maksimsed0v/card"
+	"github.com/maksimsed0v/card/v2"
 )
 
 // player describes the player
@@ -35,9 +35,8 @@ func (p *player) showCards() (allCards string) {
 }
 
 // takeCard adds one card to the player from the top of the deck
-func (p *player) takeCard(deck *[]card.Card) {
-	p.cards = append(p.cards, (*deck)[len(*deck)-1])
-	*deck = (*deck)[:len(*deck)-1]
+func (p *player) takeCard(deck *card.Deck) {
+	p.cards = append(p.cards, deck.TakeTop())
 }
 
 // info outputs information about the player's cards and score to the console

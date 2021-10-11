@@ -5,7 +5,7 @@ import (
 	"math/rand"
 	"time"
 
-	"github.com/maksimsed0v/card"
+	"github.com/maksimsed0v/card/v2"
 )
 
 // maxScore - maximum number of points in the game
@@ -29,7 +29,7 @@ var costs = map[card.Value]int{
 }
 
 // computerGame creates a computer player and gives him cards
-func computerGame(deck *[]card.Card) (playerAI player) {
+func computerGame(deck *card.Deck) (playerAI player) {
 	playerAI.name = "computer"
 
 	// matchCards - number of matching cards
@@ -41,7 +41,7 @@ func computerGame(deck *[]card.Card) (playerAI player) {
 	// function for randomness
 	rand.Seed(time.Now().UnixNano())
 
-	for range *deck {
+	for range deck.Cards {
 		if playerAI.score() < 17 { // the probability is more than 50%
 			playerAI.takeCard(deck)
 		} else if playerAI.score() < 20 { // the probability is less than 50%, the computer is taking a risk.
@@ -65,10 +65,10 @@ func computerGame(deck *[]card.Card) (playerAI player) {
 }
 
 // playerGame creates a user player and gives him cards
-func playerGame(deck *[]card.Card, userName string) (playerUser player, err error) {
+func playerGame(deck *card.Deck, userName string) (playerUser player, err error) {
 	playerUser.name = userName
 
-	if len(*deck) != 0 {
+	if len(deck.Cards) != 0 {
 		playerUser.takeCard(deck)
 		playerUser.info()
 	} else {
@@ -76,7 +76,7 @@ func playerGame(deck *[]card.Card, userName string) (playerUser player, err erro
 	}
 
 stop:
-	for range *deck {
+	for range deck.Cards {
 		// answer - a variable for the player's response
 		var answer string
 		fmt.Println("more? (Y/N)")
@@ -120,8 +120,8 @@ func result(playerAI player, playerUser player) {
 
 // Game performs the main function of the game
 func Game() {
-	deck := card.CreateDeck()
-	card.RandomDeck(deck)
+	deck := card.NewDeck()
+	deck.RandomDeck()
 
 	// playerAI, playerUser - the object of the player structure
 	var playerAI, playerUser player
@@ -137,16 +137,16 @@ func Game() {
 	}
 
 restart:
-	for range deck {
-		playerAI = computerGame(&deck)
-		playerUser, err = playerGame(&deck, name)
+	for range deck.Cards {
+		playerAI = computerGame(deck)
+		playerUser, err = playerGame(deck, name)
 		if err != nil {
 			return
 		}
 
 		result(playerAI, playerUser)
 
-		if len(deck) == 0 {
+		if len(deck.Cards) == 0 {
 			fmt.Println("the deck is over!")
 			break
 		}
